@@ -79,12 +79,14 @@ print(f"Saved distance matrix! Name of the file is: {output_distance_file}")
 
 # Identify interface contacts
 contacts = []
+# Euclidean distance calculations
 for antibody, antigen in product(antibody_atoms, antigen_atoms):
     dx = antibody['x'] - antigen['x']
     dy = antibody['y'] - antigen['y']
     dz = antibody['z'] - antigen['z']
     distance = np.sqrt((dx**2) + (dy**2) + (dz**2))
-    if distance <= 12:
+    # Setting this distance cutoff based on this article: https://pmc.ncbi.nlm.nih.gov/articles/PMC5460117/
+    if distance <= 5:
         contacts.append({
             'antibody_chain': antibody['chain'],
             'antibody_resindex': antibody['resindex'],
