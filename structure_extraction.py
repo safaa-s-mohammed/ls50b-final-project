@@ -12,7 +12,7 @@ from pymol import cmd
 from itertools import product
 
 # Configuration, variable initialization
-pdb_file = r"C:\Users\safaa\Downloads\4OLV.pdb"
+pdb_file = r"C:\Users\safaa\Downloads\4OLW.pdb"
 antibody_chains = ["H", "L"] # Creates sections for both heavy and light chains
 antigen_chains = ["G"]
 output_distance_file = "distance_matrix.csv"

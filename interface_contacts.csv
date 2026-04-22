@@ -1,4 +1,0 @@
-antibody_chain,antibody_resindex,antibody_resiname,antigen_chain,antigen_resindex,antigen_resiname,distance
-H,60,ALA,G,459,GLY,4.107
-H,55,GLY,G,367,GLY,4.361
-H,56,ALA,G,367,GLY,4.749
