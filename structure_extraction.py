@@ -18,7 +18,7 @@ pdb_file = r"C:\Users\safaa\Downloads\4OLU.pdb"
 antibody_chains = ["H", "L"] # Creates sections for both heavy and light chains
 antigen_chains = ["G"]
 output_distance_file = "distance_matrix.csv"
-output_interfact_contacts = "interface_contacts.csv"
+output_interface_contacts = "interface_contacts.csv"
 
 # Initialize PyMOL
 pymol.finish_launching(['pymol', '-cq'])
@@ -79,4 +79,26 @@ df_distances = pd.DataFrame(distance_matrix, index = labels, columns = labels)
 df_distances.to_csv(output_distance_file)
 print(f"Saved distance matrix! Name of the file is: {output_distance_file}")
 
+# Identify interface contacts
+contacts = []
+for antibody, antigen in product(antibody_atoms, antigen_atoms):
+    dx = antibody['x'] - antigen['x']
+    dy = antibody['y'] - antigen['y']
+    dz = antibody['z'] - antigen['z']
+    distance = np.sqrt((dx**2) + (dy**2) + (dz**2))
+    if distance <= 5:
+        contacts.append({
+            'antibody_chain': antibody['chain'],
+            'antibody_resindex': antibody['resindex'],
+            'antibody_resiname': antibody['resiname'],
+            'antigen_chain': antigen['chain'],
+            'antigen_resindex': antigen['resindex'],
+            'antigen_resiname': antigen['resiname'],
+            'distance': round(distance, 3)
+        })
+df_interface = pd.DataFrame(contacts).sort_values("distance")
+df_interface.to_csv(output_interface_contacts, index = False)
+print(f"Saved interface contacts file! File name is: {output_interface_contacts}")
+
+cmd.quit()
 
