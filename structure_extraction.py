@@ -1,6 +1,5 @@
-"""
-Structure Data Extraction from PDB/AlphaFold Protein Models
-"""
+
+# Structure Data Extraction from PDB/AlphaFold Protein Models
 
 import numpy as np
 import pandas as pd
@@ -35,8 +34,7 @@ def get_alpha_carbons(chains):
     # to the dictionary
     cmd.iterate_state(
         1,
-        section,
-        "name CA",
+        f"({section}) and name CA",
         "atoms.append({'chain': chain, 'resindex': resi, 'resiname': resn, 'x': x, 'y': y, 'z': z})",
         # Maps variables from the Python script to atom properties in the iteration
         space = {'atoms': atoms}
@@ -54,24 +52,24 @@ print(f"Total residues: {len(all_atoms)}")
 
 # Creates the distance matrix
 n = len(all_atoms)
-coordinates = np.zeros(n, 3)
+coordinates = np.zeros((n, 3))
 labels = []
 
-for a in all_atoms:
+for i, a in enumerate(all_atoms):
     coordinates[a, 0] = all_atoms['x']
     coordinates[a, 1] = all_atoms['y']
     coordinates[a, 2] = all_atoms['z']
 
 # Uses dictionary comprehension to create a dictionary from an iterable
 # object in a single line
-labels = [f"{a['chain']}_{a['resindex']}_a{['resiname']}" for a in all_atoms]
+labels = [f"{a['chain']}_{a['resindex']}_{a['resiname']}" for a in all_atoms]
 
 # Calculates the distance matrix
-distance_matrix = np.zeros(n, n)
+distance_matrix = np.zeros((n, n))
 for i in range(n):
     for j in range(n):
         dx = coordinates[i, 0] - coordinates[j, 0]
-        dy = coordinates[i, 1], - coordinates[j, 1]
+        dy = coordinates[i, 1] - coordinates[j, 1]
         dz = coordinates[i, 2] - coordinates[j, 2]
         distance_matrix[i, j] = np.sqrt((dx**2) + (dy**2) + (dz**2))
 
@@ -96,9 +94,9 @@ for antibody, antigen in product(antibody_atoms, antigen_atoms):
             'antigen_resiname': antigen['resiname'],
             'distance': round(distance, 3)
         })
+
 df_interface = pd.DataFrame(contacts).sort_values("distance")
 df_interface.to_csv(output_interface_contacts, index = False)
 print(f"Saved interface contacts file! File name is: {output_interface_contacts}")
 
 cmd.quit()
-
