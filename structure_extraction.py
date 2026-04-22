@@ -13,7 +13,6 @@ from itertools import product
 
 # Configuration, variable initialization
 pdb_file = r"C:\Users\safaa\Downloads\4OLU.pdb"
-# Some form of AlphaFold file initialization once I figure that out
 antibody_chains = ["H", "L"] # Creates sections for both heavy and light chains
 antigen_chains = ["G"]
 output_distance_file = "distance_matrix.csv"
@@ -21,6 +20,7 @@ output_interface_contacts = "interface_contacts.csv"
 
 # Initialize PyMOL
 pymol.finish_launching(['pymol', '-cq'])
+cmd.load(pdb_file, "complex")
 
 # Basic approach: calculate pairwise Euclidean distances
 # between Cα in a protein structure
@@ -56,9 +56,9 @@ coordinates = np.zeros((n, 3))
 labels = []
 
 for i, a in enumerate(all_atoms):
-    coordinates[a, 0] = all_atoms['x']
-    coordinates[a, 1] = all_atoms['y']
-    coordinates[a, 2] = all_atoms['z']
+    coordinates[a, 0] = a['x']
+    coordinates[a, 1] = a['y']
+    coordinates[a, 2] = a['z']
 
 # Uses dictionary comprehension to create a dictionary from an iterable
 # object in a single line
@@ -84,7 +84,7 @@ for antibody, antigen in product(antibody_atoms, antigen_atoms):
     dy = antibody['y'] - antigen['y']
     dz = antibody['z'] - antigen['z']
     distance = np.sqrt((dx**2) + (dy**2) + (dz**2))
-    if distance <= 5:
+    if distance <= 12:
         contacts.append({
             'antibody_chain': antibody['chain'],
             'antibody_resindex': antibody['resindex'],
