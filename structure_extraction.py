@@ -56,9 +56,9 @@ coordinates = np.zeros((n, 3))
 labels = []
 
 for i, a in enumerate(all_atoms):
-    coordinates[a, 0] = a['x']
-    coordinates[a, 1] = a['y']
-    coordinates[a, 2] = a['z']
+    coordinates[i, 0] = a['x']
+    coordinates[i, 1] = a['y']
+    coordinates[i, 2] = a['z']
 
 # Uses dictionary comprehension to create a dictionary from an iterable
 # object in a single line
