@@ -1,6 +1,7 @@
 # Import necessary libraries 
 from Bio.PDB.MMCIFParser import MMCIFParser
 from Bio.SeqUtils import seq1 
+import pandas as pd
 
 # Parse mmCIF file
 parser = MMCIFParser(QUIET = True)
@@ -96,3 +97,46 @@ CH505TF_m7 = find_min_distance(CH505TF_mature, 57)
 CH505TF_m8 = find_min_distance(CH505TF_mature, 59)
 CH505TF_m9 = find_min_distance(CH505TF_mature, 127)
 
+# Finds minimum distance for each site in the germline model, using the amture structure for each antigen
+# Store each result in a variable
+# SF162
+SF162_0 = find_min_distance(SF162_g0, 3)
+SF162_1 = find_min_distance(SF162_g1, 18)
+SF162_2 = find_min_distance(SF162_g2, 35)
+SF162_3 = find_min_distance(SF162_g3, 45)
+SF162_4 = find_min_distance(SF162_g4, 51)
+SF162_5 = find_min_distance(SF162_g5, 52)
+SF162_6 = find_min_distance(SF162_g6, 55)
+SF162_7 = find_min_distance(SF162_g7, 57)
+SF162_8 = find_min_distance(SF162_g8, 59)
+SF162_9 = find_min_distance(SF162_g9, 127)
+# CH505TF
+CH505TF_0 = find_min_distance(CH505TF_g0, 3)
+CH505TF_1 = find_min_distance (CH505TF_g1, 18)
+CH505TF_2 = find_min_distance(CH505TF_g2, 35)
+CH505TF_3 = find_min_distance(CH505TF_g3, 45)
+CH505TF_4 = find_min_distance(CH505TF_g4, 51)
+CH505TF_5 = find_min_distance(CH505TF_g5, 52)
+CH505TF_6 = find_min_distance(CH505TF_g6, 55)
+CH505TF_7 = find_min_distance(CH505TF_g7, 57)
+CH505TF_8 = find_min_distance(CH505TF_g8, 59)
+CH505TF_9 = find_min_distance(CH505TF_g9, 127)
+
+# Organizes all the data we gathered into a matrix csv file
+site_locs = [3, 18, 35, 45, 51, 52, 55, 57, 59, 127]
+site_labels = [f'site_{i}' for i in range(10)]
+
+df_distances = pd.DataFrame({
+    'site': site_labels,
+    'site_location': site_locs,
+    'SF162_mature':  [SF162_m0, SF162_m1, SF162_m2, SF162_m3, SF162_m4,
+                      SF162_m5, SF162_m6, SF162_m7, SF162_m8, SF162_m9],
+    'SF162_germline':[SF162_0,  SF162_1,  SF162_2,  SF162_3,  SF162_4,
+                      SF162_5,  SF162_6,  SF162_7,  SF162_8,  SF162_9],
+    'CH505TF_mature':[CH505TF_m0, CH505TF_m1, CH505TF_m2, CH505TF_m3, CH505TF_m4,
+                      CH505TF_m5, CH505TF_m6, CH505TF_m7, CH505TF_m8, CH505TF_m9],
+    'CH505TF_germline':[CH505TF_0, CH505TF_1, CH505TF_2, CH505TF_3, CH505TF_4,
+                        CH505TF_5, CH505TF_6, CH505TF_7, CH505TF_8, CH505TF_9]
+})
+
+df_distances.to_csv('minimum_distances.csv', index=False)
